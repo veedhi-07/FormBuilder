@@ -29,7 +29,6 @@ export default function MainLayout() {
   const deleteTask = (id: string) => {
     setTasks((prev) => prev.filter((task) => task.id !== id));
   };
-
   //movetask
   const dragTasks = (taskIds: string[], status: Task["status"]) => {
     setTasks((prev) =>
@@ -38,8 +37,8 @@ export default function MainLayout() {
       ),
     );
   };
-
-  //filters task whose id === taskid.Keeps the selected tasks in array.
+  //filters task whose id === taskid.
+  //Keeps the selected tasks in array.
   const multipleSelect = (taskId: string) => {
     setSelectedTaskId((prev) =>
       prev.includes(taskId)
@@ -47,6 +46,7 @@ export default function MainLayout() {
         : [...prev, taskId],
     );
   };
+  console.log(selectedTaskId);
 
   const todoTasks = tasks.filter((task) => task.status === "todo");
   const inProgressTasks = tasks.filter((task) => task.status === "inProgress");
