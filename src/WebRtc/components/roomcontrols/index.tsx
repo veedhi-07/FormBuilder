@@ -22,7 +22,7 @@ export default function RoomControls({
           placeholder="Room ID"
         />
       </div>
-      <div className="mt-3">
+      <div className="mt-5">
         <button className="bg-blue-400 h-10 w-28 rounded" onClick={createRoom}>
           Create Room
         </button>

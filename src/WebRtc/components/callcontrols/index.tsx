@@ -5,7 +5,7 @@ interface Props {
 
 export default function CallControls({ startMedia, hangup }: Props) {
   return (
-    <div className="mt-5">
+    <div className="mt-12">
       <button className="bg-red-400 h-10 w-28 rounded" onClick={startMedia}>
         Start Mic
       </button>
