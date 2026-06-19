@@ -74,7 +74,7 @@ export default function useWebRTC() {
       //send ice candidates to firebase.
       await addDoc(callerCandidatesCollection, event.candidate.toJSON());
     };
-
+//  * The **`createOffer()`** method of the RTCPeerConnection interface initiates the creation of an SDP offer for the purpose of starting a new WebRTC connection to a remote peer.
     const offer = await peerRef.current.createOffer();
     await peerRef.current.setLocalDescription(offer);
 
@@ -91,6 +91,7 @@ export default function useWebRTC() {
 
     onSnapshot(calleeCandidatesCollection, (snapshot) => {
       snapshot.docChanges().forEach(async (change) => {
+        //changes can be added, modified or removed.
         if (change.type === "added") {
           //convert firestore data to webrtc ice object
           const candidate = new RTCIceCandidate(change.doc.data());
