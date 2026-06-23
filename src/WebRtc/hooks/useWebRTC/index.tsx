@@ -45,11 +45,14 @@ export default function useWebRTC() {
       if (remoteAudioRef.current) {
         //attach remote audio stream to <audio> tag
         //webrtc gives live mediaStream not an MP3 file so browser provides audio.drcObject which accepts media stream instead of string url.
-        //since onl one stream get that stream so 0.
+        //webrtc provides live mediastream not a url.
+        //srcobject accepts mediastream objects so srcobject.
+        //since only one stream get that stream so 0.
         remoteAudioRef.current.srcObject = event.streams[0];
       }
     };
   };
+  //create room
   const createRoom = async () => {
     // console.log("Create room clicked");
     // console.log(peerRef.current);
@@ -65,7 +68,7 @@ export default function useWebRTC() {
 
     setRoomId(roomRef.id);
 
-    //sub collaction for network candidates.
+    //sub collaction for ice network candidates.
     const callerCandidatesCollection = collection(roomRef, "callerCandidates");
 
     //triggered when browser finds network route
@@ -74,8 +77,10 @@ export default function useWebRTC() {
       //send ice candidates to firebase.
       await addDoc(callerCandidatesCollection, event.candidate.toJSON());
     };
-//  * The **`createOffer()`** method of the RTCPeerConnection interface initiates the creation of an SDP offer for the purpose of starting a new WebRTC connection to a remote peer.
+    //  * The **`createOffer()`** method of the RTCPeerConnection interface initiates the creation of an SDP offer for the purpose of starting a new WebRTC connection to a remote peer.
     const offer = await peerRef.current.createOffer();
+    //  * The **`setLocalDescription()`** method of the RTCPeerConnection interface changes the local description associated with the connection. This description specifies the properties of the local end of the connection, including the media format. The method takes a single parameter—the session description—and it returns a Promise which is fulfilled once the description has been changed, asynchronously.
+    //without this ICE gathering will not start.
     await peerRef.current.setLocalDescription(offer);
 
     console.log(peerRef.current?.iceGatheringState);
@@ -126,11 +131,11 @@ export default function useWebRTC() {
   const joinRoom = async () => {
     if (!peerRef.current) {
       toast.error("Start Microphone First");
-      console.log("Start microphone first");
+      console.log("Start Microphone First");
       return;
     }
     if (!roomId) {
-      toast.error("Enter Room ID!!");
+      toast.error("Enter Room ID");
       // console.log("Enter room id");
       return;
     }
@@ -140,21 +145,25 @@ export default function useWebRTC() {
     const roomSnapshot = await getDoc(roomRef);
 
     if (!roomSnapshot.exists()) {
+      toast.error("Room does not exist");
       console.log("Room does not exist");
       return;
     }
-
+    //set caller offer
     const roomData = roomSnapshot.data();
     console.log("Offer received", roomData);
+
+    //set caller's offer as remote description
     await peerRef.current.setRemoteDescription(
       new RTCSessionDescription(roomData.offer),
     );
 
     const calleeCandidatesCollection = collection(roomRef, "calleeCandidates");
 
+    //listen for local ice candidates
     peerRef.current.onicecandidate = async (event) => {
       if (!event.candidate) {
-        console.log("ICE GAthering complete");
+        console.log("ICE Gathering complete");
         return;
       }
       await addDoc(calleeCandidatesCollection, event.candidate.toJSON());
@@ -173,9 +182,10 @@ export default function useWebRTC() {
     console.log("Answer sent");
 
     const callerCandidatesCollection = collection(roomRef, "callerCandidates");
-
+    //listen for new caller candidates
     onSnapshot(callerCandidatesCollection, (snapshot) => {
       snapshot.docChanges().forEach(async (change) => {
+        //process only new candidates
         if (change.type === "added") {
           const candidate = new RTCIceCandidate(change.doc.data());
 
