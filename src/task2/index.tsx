@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function UsersTable() {
+export default function Task2() {
   const [users, setUsers] = useState([
     { id: 1, name: "John", age: 25 },
     { id: 2, name: "LJ", age: 27 },

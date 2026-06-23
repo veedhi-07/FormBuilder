@@ -73,13 +73,17 @@ export default function useWebRTC() {
 
     //triggered when browser finds network route
     peerRef.current.onicecandidate = async (event) => {
-      if (!event.candidate) return;
+      if (!event.candidate) {
+        console.log("ICE gathering completed!");
+        return;
+      }
       //send ice candidates to firebase.
       await addDoc(callerCandidatesCollection, event.candidate.toJSON());
     };
     //  * The **`createOffer()`** method of the RTCPeerConnection interface initiates the creation of an SDP offer for the purpose of starting a new WebRTC connection to a remote peer.
     const offer = await peerRef.current.createOffer();
-    //  * The **`setLocalDescription()`** method of the RTCPeerConnection interface changes the local description associated with the connection. This description specifies the properties of the local end of the connection, including the media format. The method takes a single parameter—the session description—and it returns a Promise which is fulfilled once the description has been changed, asynchronously.
+    //  * The **`setLocalDescription()`** method of the RTCPeerConnection interface changes the local description associated with the connection.
+    // // This description specifies the properties of the local end of the connection, including the media format. The method takes a single parameter—the session description—and it returns a Promise which is fulfilled once the description has been changed, asynchronously.
     //without this ICE gathering will not start.
     await peerRef.current.setLocalDescription(offer);
 
@@ -163,7 +167,7 @@ export default function useWebRTC() {
     //listen for local ice candidates
     peerRef.current.onicecandidate = async (event) => {
       if (!event.candidate) {
-        console.log("ICE Gathering complete");
+        console.log("ICE Gathering completed");
         return;
       }
       await addDoc(calleeCandidatesCollection, event.candidate.toJSON());
