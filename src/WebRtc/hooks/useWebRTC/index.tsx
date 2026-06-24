@@ -52,6 +52,7 @@ export default function useWebRTC() {
       }
     };
   };
+
   //create room
   const createRoom = async () => {
     // console.log("Create room clicked");
@@ -61,16 +62,11 @@ export default function useWebRTC() {
       console.log("No Peer Connection");
       return;
     }
-
     const roomRef = doc(collection(db, "calls"));
     // * The **`createOffer()`** method of the RTCPeerConnection interface initiates the creation of an SDP offer for the purpose of starting a new WebRTC connection to a remote peer.
-    // console.log("Room Created", roomRef.id);
-
     setRoomId(roomRef.id);
-
-    //sub collaction for ice network candidates.
+    //sub collection for ice network candidates.
     const callerCandidatesCollection = collection(roomRef, "callerCandidates");
-
     //triggered when browser finds network route
     peerRef.current.onicecandidate = async (event) => {
       if (!event.candidate) {
@@ -86,16 +82,13 @@ export default function useWebRTC() {
     // // This description specifies the properties of the local end of the connection, including the media format. The method takes a single parameter—the session description—and it returns a Promise which is fulfilled once the description has been changed, asynchronously.
     //without this ICE gathering will not start.
     await peerRef.current.setLocalDescription(offer);
-
     console.log(peerRef.current?.iceGatheringState);
-
     await setDoc(roomRef, {
       offer: {
         type: offer.type,
         sdp: offer.sdp,
       },
     });
-
     const calleeCandidatesCollection = collection(roomRef, "calleeCandidates");
 
     onSnapshot(calleeCandidatesCollection, (snapshot) => {
@@ -106,7 +99,6 @@ export default function useWebRTC() {
           const candidate = new RTCIceCandidate(change.doc.data());
           //add candidate to connection
           await peerRef.current?.addIceCandidate(candidate);
-          // console.log("Callee ICE added");
         }
       });
     });
@@ -127,7 +119,6 @@ export default function useWebRTC() {
     peerRef.current?.close();
     localStreamRef.current?.getTracks().forEach((track) => track.stop());
     remoteStreamRef.current?.getTracks().forEach((track) => track.stop());
-    // console.log("CALL ENDED");
     toast.error("Call Ended!!");
   };
 
@@ -150,7 +141,6 @@ export default function useWebRTC() {
 
     if (!roomSnapshot.exists()) {
       toast.error("Room does not exist");
-      console.log("Room does not exist");
       return;
     }
     //set caller offer

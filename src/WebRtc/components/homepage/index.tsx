@@ -1,5 +1,4 @@
 import useWebRTC from "../../hooks/useWebRTC";
-// import VideoPlayer from "../videoplayer";
 import RoomControls from "../roomcontrols/index";
 import CallControls from "../callcontrols/index";
 
