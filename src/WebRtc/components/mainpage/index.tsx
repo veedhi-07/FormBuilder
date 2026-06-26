@@ -76,7 +76,7 @@ export default function MainPage() {
         </div>
       )}
       <div className="min-h-screen bg-zinc-900 p-6">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-40">
           <ParticipantCard name="You" />
 
           {rtc.remoteJoined && <ParticipantCard name="Remote User" />}
