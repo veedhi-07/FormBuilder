@@ -1,15 +1,15 @@
 interface Props {
   roomId: string;
   setRoomId: (value: string) => void;
-  createRoom: () => void;
-  joinRoom: () => void;
+  createCall: () => void;
+  joinCall: () => void;
 }
 
 export default function RoomControls({
   roomId,
   setRoomId,
-  createRoom,
-  joinRoom,
+  createCall,
+  joinCall,
 }: Props) {
   return (
     <div className="flex flex-col">
@@ -23,12 +23,12 @@ export default function RoomControls({
         />
       </div>
       <div className="mt-5">
-        <button className="bg-blue-400 h-10 w-28 rounded" onClick={createRoom}>
+        <button className="bg-white h-10 w-28 rounded" onClick={createCall}>
           Create Room
         </button>
         <button
-          className="bg-blue-400 h-10 w-28 ml-3 rounded"
-          onClick={joinRoom}
+          className="bg-white h-10 w-28 ml-3 rounded"
+          onClick={joinCall}
         >
           Join Room
         </button>
