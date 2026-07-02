@@ -115,7 +115,7 @@ export default function useWebRTC() {
         console.log("Answer received");
       }
       if (data?.callEnded) {
-        toast.error("Call Ended");
+        toast("Call Ended");
 
         peerRef.current?.close();
         localStreamRef.current?.getTracks().forEach((track) => track.stop());
@@ -129,7 +129,6 @@ export default function useWebRTC() {
       }
     });
   };
-
   //Hang UP
   const hangup = async () => {
     if (roomRef.current) {

@@ -13,33 +13,6 @@ export default function CallControls({
   selectedMic,
   setSelectedMic,
 }: Props) {
-  // return (
-  //   <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-6 rounded-full px-8 py=4 backdrop-blur-xl shadow-2xl">
-  //     <button
-  //       className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 text-2xl transition hover:scale-110 hover:bg-blue-500"
-  //       onClick={startMedia}
-  //     >
-  //       🎙
-  //     </button>
-  //     <select
-  //       value={selectedMic}
-  //       onChange={(e) => setSelectedMic(e.target.value)}
-  //       className="rounded border-amber-50 p-2 bg-blue-300"
-  //     >
-  //       {microphones.map((mic) => (
-  //         <option key={mic.deviceId} value={mic.deviceId}>
-  //           {mic.label}
-  //         </option>
-  //       ))}
-  //     </select>
-  //     <button
-  //       className="flex h-16 w-16 items-center justify-center rounded-full bg-red-600 text-2xl transition hover:scale-110 hover:bg-red-500"
-  //       onClick={hangup}
-  //     >
-  //       📞
-  //     </button>
-  //   </div>
-  // );
   return (
     <div className="fixed bottom-8 left-1/2 z-50 flex -translate-x-1/2 items-center gap-5 rounded-2xl border border-white/10 bg-slate-900/70 px-6 py-4 shadow-2xl backdrop-blur-xl">
       {/* Microphone Selection */}
